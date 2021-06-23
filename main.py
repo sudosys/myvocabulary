@@ -52,6 +52,10 @@ class MyVocabulary(tk.Frame):
         vocabulary.close()
 
     def search(self):
+
+        if self.search_word.get() == "":
+            messagebox.showerror(title = "Error", message = "You didn't enter any words!")
+            return
         
         translator = googletrans.Translator()
 
