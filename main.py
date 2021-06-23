@@ -82,10 +82,10 @@ class MyVocabulary(tk.Frame):
                 
                 ctrl += 1
 
-        vocabulary = open("vocabulary.txt", "w", encoding = "utf-8")
+            vocabulary = open("vocabulary.txt", "w", encoding = "utf-8")
 
-        for line in file_content: vocabulary.write(line)
-
-        self.word_fill()
+            for line in file_content: vocabulary.write(line)
 
         vocabulary.close()
+
+        self.word_fill()
