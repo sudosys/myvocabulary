@@ -64,9 +64,28 @@ class MyVocabulary(tk.Frame):
 
             self.word_fill()
 
-
-
-            
-    
     def remove(self):
-        pass
+        
+        for index in self.word_listbox.curselection():
+
+            word_to_delete = self.word_listbox.get(index)
+
+            vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
+
+            file_content = vocabulary.readlines()
+
+            ctrl = 0
+
+            for line in file_content:
+
+                if word_to_delete in line: del file_content[ctrl]
+                
+                ctrl += 1
+
+        vocabulary = open("vocabulary.txt", "w", encoding = "utf-8")
+
+        for line in file_content: vocabulary.write(line)
+
+        self.word_fill()
+
+        vocabulary.close()
