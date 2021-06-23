@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter.constants import TRUE
 import googletrans
 from PIL import ImageTk, Image
 
@@ -8,21 +9,29 @@ class MyVocabulary(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
+        self.upper_frame = tk.Frame(self.parent)
+        self.lower_frame = tk.Frame(self.parent)
+        self.upper_frame.pack(side = tk.TOP)
+        self.lower_frame.pack(side = tk.BOTTOM)
         self.initGUI()
     
     def initGUI(self):
         self.parent.title("MyVocabulary")
-        self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
+        self.word_listbox = tk.Listbox(self.upper_frame, selectmode = "multiple", width = 46, height = 22)
+        self.word_listbox_scrollbar = tk.Scrollbar(self.upper_frame)
         self.word_fill()
         self.search_word = tk.StringVar()
-        self.search_box = tk.Entry(self.parent, textvariable = self.search_word)
-        self.search_button = tk.Button(self.parent, text = "Search", command = self.search)
-        self.remove_button = tk.Button(self.parent, text = "Remove Selected Word(s)", command = self.remove)
-        self.bottom_label = tk.Label(self.parent, text = "Powered by Google Translate")
+        self.search_box = tk.Entry(self.lower_frame, textvariable = self.search_word)
+        self.search_button = tk.Button(self.lower_frame, text = "Search", command = self.search)
+        self.remove_button = tk.Button(self.lower_frame, text = "Remove Selected Word(s)", command = self.remove)
+        self.bottom_label = tk.Label(self.lower_frame, text = "Powered by Google Translate")
         self.gt_icon = ImageTk.PhotoImage(Image.open("icons\\google_translate_icon.ico"))
-        self.icon_label = tk.Label(image = self.gt_icon)
+        self.icon_label = tk.Label(self.lower_frame, image = self.gt_icon)
         # Packing #
-        self.word_listbox.pack(fill = tk.BOTH, expand = True)
+        self.word_listbox.pack(side = tk.LEFT, fill = tk.BOTH, expand = tk.TRUE)
+        self.word_listbox_scrollbar.pack(side = tk.RIGHT, fill = tk.BOTH)
+        self.word_listbox.config(yscrollcommand = self.word_listbox_scrollbar.set)
+        self.word_listbox_scrollbar.config(command = self.word_listbox.yview)
         self.search_box.pack(pady = 10)
         self.search_button.pack(pady = 10)
         self.remove_button.pack(pady = 10)
