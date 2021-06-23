@@ -65,6 +65,10 @@ class MyVocabulary(tk.Frame):
             self.word_fill()
 
     def remove(self):
+
+        if len(self.word_listbox.curselection()) == 0:
+            messagebox.showerror(title = "Error", message = "You didn't select any words!")
+            return
         
         for index in self.word_listbox.curselection():
 
