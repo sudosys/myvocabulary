@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter.constants import TRUE
 import googletrans
 from PIL import ImageTk, Image
 
