@@ -2,9 +2,9 @@ from main import *
 
 root = tk.Tk()
 
-root.geometry("300x500")
+root.geometry("300x600")
 
-root.iconbitmap("myvocabulary_icon.ico")
+root.iconbitmap("icons\\myvocabulary_icon.ico")
 
 app = MyVocabulary(root)
 
