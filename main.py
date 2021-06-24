@@ -13,10 +13,8 @@ class MyVocabulary(tk.Frame):
         self.initGUI()
     
     def initGUI(self):
-        try:
-            self.open_vocab("r")
-        except:
-            self.welcome_popup()
+        try: self.open_vocab("r")
+        except: self.welcome_popup()
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
         self.word_listbox_scrollbar = tk.Scrollbar(self.parent)
