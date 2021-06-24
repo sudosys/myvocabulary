@@ -8,16 +8,14 @@ class MyVocabulary(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
-        self.upper_frame = tk.Frame(self.parent)
         self.lower_frame = tk.Frame(self.parent)
-        self.upper_frame.pack(side = tk.TOP)
         self.lower_frame.pack(side = tk.BOTTOM)
         self.initGUI()
     
     def initGUI(self):
         self.parent.title("MyVocabulary")
-        self.word_listbox = tk.Listbox(self.upper_frame, selectmode = "multiple", width = 46, height = 22)
-        self.word_listbox_scrollbar = tk.Scrollbar(self.upper_frame)
+        self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
+        self.word_listbox_scrollbar = tk.Scrollbar(self.parent)
         self.word_fill()
         self.search_word = tk.StringVar()
         self.search_box = tk.Entry(self.lower_frame, textvariable = self.search_word)
@@ -26,8 +24,8 @@ class MyVocabulary(tk.Frame):
         self.bottom_label = tk.Label(self.lower_frame, text = "Powered by Google Translate")
         self.gt_icon = ImageTk.PhotoImage(Image.open("icons\\google_translate_icon.ico"))
         self.icon_label = tk.Label(self.lower_frame, image = self.gt_icon)
-        # Packing #
-        self.word_listbox.pack(side = tk.LEFT, fill = tk.BOTH, expand = tk.TRUE)
+        # Packings and configurations #
+        self.word_listbox.pack(side = tk.LEFT, fill = tk.BOTH, expand = True)
         self.word_listbox_scrollbar.pack(side = tk.RIGHT, fill = tk.BOTH)
         self.word_listbox.config(yscrollcommand = self.word_listbox_scrollbar.set)
         self.word_listbox_scrollbar.config(command = self.word_listbox.yview)
