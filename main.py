@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter.constants import WORD
 import googletrans
 from PIL import ImageTk, Image
 
@@ -59,6 +60,21 @@ class MyVocabulary(tk.Frame):
         translator = googletrans.Translator()
 
         self.translation = (translator.translate(self.search_word.get(), dest = "tr").text).lower()
+
+        vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
+
+        file_content = vocabulary.readlines()
+
+        for line in file_content:
+
+            word = line.split(">")[0].strip()
+
+            if self.search_word.get() == word:
+                messagebox.showwarning(title = "Warning", message = "This word already exists!")
+                vocabulary.close()
+                return
+
+        vocabulary.close()
 
         dialog_msg = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation)
 
