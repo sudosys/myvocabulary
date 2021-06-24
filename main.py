@@ -1,3 +1,4 @@
+from logging import info
 import tkinter as tk
 from tkinter import messagebox
 import googletrans
@@ -16,6 +17,7 @@ class MyVocabulary(tk.Frame):
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
         self.word_listbox_scrollbar = tk.Scrollbar(self.parent)
+        self.word_listbox.bind("<Double-Button>", self.listbox_dbclick)
         self.word_fill()
         self.search_word = tk.StringVar()
         self.search_box = tk.Entry(self.lower_frame, textvariable = self.search_word)
@@ -119,3 +121,14 @@ class MyVocabulary(tk.Frame):
         vocabulary.close()
 
         self.word_fill()
+    
+    def listbox_dbclick(self, event):
+
+        if len(self.word_listbox.curselection()) > 1:
+
+            messagebox.showerror(title = "Error", message = "You must select only one word!")
+            return
+
+        info_msg = self.word_listbox.get(self.word_listbox.curselection())
+
+        messagebox.showinfo(title = "Word and Its Meaning", message = info_msg)
