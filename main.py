@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter.constants import WORD
 import googletrans
 from PIL import ImageTk, Image
 
@@ -70,7 +69,8 @@ class MyVocabulary(tk.Frame):
             word = line.split(">")[0].strip()
 
             if self.search_word.get() == word:
-                messagebox.showwarning(title = "Warning", message = "This word already exists!")
+                warning_msg = "This word already exists!\n\n{}".format(line)
+                messagebox.showwarning(title = "Warning", message = warning_msg)
                 vocabulary.close()
                 return
 
@@ -100,7 +100,7 @@ class MyVocabulary(tk.Frame):
         
         for index in self.word_listbox.curselection():
 
-            word_to_delete = self.word_listbox.get(index)
+            line_to_delete = self.word_listbox.get(index)
 
             vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
 
@@ -110,7 +110,7 @@ class MyVocabulary(tk.Frame):
 
             for line in file_content:
 
-                if word_to_delete in line: del file_content[ctrl]
+                if line_to_delete == line: del file_content[ctrl]
                 
                 ctrl += 1
 
