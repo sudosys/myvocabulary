@@ -1,4 +1,3 @@
-from logging import info
 import tkinter as tk
 from tkinter import messagebox
 import googletrans
@@ -14,6 +13,10 @@ class MyVocabulary(tk.Frame):
         self.initGUI()
     
     def initGUI(self):
+        try:
+            self.open_vocab("r")
+        except:
+            self.welcome_popup()
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
         self.word_listbox_scrollbar = tk.Scrollbar(self.parent)
@@ -36,19 +39,29 @@ class MyVocabulary(tk.Frame):
         self.remove_button.pack(pady = 10)
         self.bottom_label.pack(side = tk.LEFT, pady = 10)
         self.icon_label.pack(side = tk.RIGHT, pady = 10)
+
+    def open_vocab(self, mode, return_what = None):
+
+        vocabulary = open("vocabulary.txt", mode, encoding = "utf-8")
+
+        if mode == "r":
+        
+            file_content = vocabulary.readlines()
+            vocabulary.close()
+
+        if return_what == "file_content":
+            return file_content
+        elif return_what == "vocabulary":
+            return vocabulary
     
     def word_fill(self):
 
         self.word_listbox.delete(0, tk.END)
 
-        vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
-
-        file_content = vocabulary.readlines()
+        file_content = self.open_vocab("r", "file_content")
 
         for line in file_content:
             self.word_listbox.insert(0, line)
-        
-        vocabulary.close()
 
     def search(self):
 
@@ -60,9 +73,7 @@ class MyVocabulary(tk.Frame):
 
         self.translation = (translator.translate(self.search_word.get(), src = "en", dest = "tr").text).lower()
 
-        vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
-
-        file_content = vocabulary.readlines()
+        file_content = self.open_vocab("r", "file_content")
 
         for line in file_content:
 
@@ -71,10 +82,7 @@ class MyVocabulary(tk.Frame):
             if self.search_word.get() == word:
                 warning_msg = "This word already exists!\n\n{}".format(line)
                 messagebox.showwarning(title = "Warning", message = warning_msg)
-                vocabulary.close()
                 return
-
-        vocabulary.close()
 
         dialog_msg = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation)
 
@@ -82,7 +90,7 @@ class MyVocabulary(tk.Frame):
 
         if dialog_win == True:
     
-            vocabulary = open("vocabulary.txt", "a", encoding = "utf-8")
+            vocabulary = self.open_vocab("a", "vocabulary")
 
             line = "{} > {}\n".format(self.search_word.get(), self.translation)
 
@@ -102,9 +110,7 @@ class MyVocabulary(tk.Frame):
 
             line_to_delete = self.word_listbox.get(index)
 
-            vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
-
-            file_content = vocabulary.readlines()
+            file_content = self.open_vocab("r", "file_content")
 
             ctrl = 0
 
@@ -114,7 +120,7 @@ class MyVocabulary(tk.Frame):
                 
                 ctrl += 1
 
-            vocabulary = open("vocabulary.txt", "w", encoding = "utf-8")
+            vocabulary = self.open_vocab("w", "vocabulary")
 
             for line in file_content: vocabulary.write(line)
 
@@ -132,3 +138,9 @@ class MyVocabulary(tk.Frame):
         info_msg = self.word_listbox.get(self.word_listbox.curselection())
 
         messagebox.showinfo(title = "Word and Its Meaning", message = info_msg)
+    
+    def welcome_popup(self):
+
+        self.open_vocab("w")
+
+        messagebox.showinfo(title = "Welcome!", message = "Looks like this is the first time you're using MyVocabulary.\nWe've created a \"vocabulary.txt\" file for you, which is where you will be storing your words.")
