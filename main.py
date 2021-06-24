@@ -34,8 +34,8 @@ class MyVocabulary(tk.Frame):
         self.search_box.pack(pady = 10)
         self.search_button.pack(pady = 10)
         self.remove_button.pack(pady = 10)
-        self.bottom_label.pack(pady = 10)
-        self.icon_label.pack(pady = 10)
+        self.bottom_label.pack(side = tk.LEFT, pady = 10)
+        self.icon_label.pack(side = tk.RIGHT, pady = 10)
     
     def word_fill(self):
 
