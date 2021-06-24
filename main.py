@@ -58,7 +58,7 @@ class MyVocabulary(tk.Frame):
         
         translator = googletrans.Translator()
 
-        self.translation = (translator.translate(self.search_word.get(), dest = "tr").text).lower()
+        self.translation = (translator.translate(self.search_word.get(), src = "en", dest = "tr").text).lower()
 
         vocabulary = open("vocabulary.txt", "r", encoding = "utf-8")
 
