@@ -65,27 +65,55 @@ class MyVocabulary(tk.Frame):
         for line in file_content:
             self.word_listbox.insert(0, line)
     
+    def add_window(self):
+
+        self.add_window_ = tk.Tk()
+
+        self.add_window_.geometry("365x140+760+400")
+
+        self.add_window_.iconbitmap("icons\\myvocabulary_icon.ico")
+
+        self.add_window_.resizable(False, False)
+
+        self.add_window_.title("Meaning Found!")
+
+        question_label = ttk.Label(self.add_window_, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation))
+
+        yes_button = ttk.Button(self.add_window_, text = "Yes", command = lambda: self.add_to_vocab(self.translation, external = self.add_window_))
+        edit_button = ttk.Button(self.add_window_, text = "Edit", command = self.edit_window)
+        no_button = ttk.Button(self.add_window_, text = "No", command = self.add_window_.destroy)
+
+        question_label.place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
+
+        no_button.place(relx = 1.0, rely = 1.0, anchor = tk.SE)
+        edit_button.place(relx = 0.75, rely = 1.0, anchor = tk.SE)
+        yes_button.place(relx = 0.5, rely = 1.0, anchor = tk.SE)
+
+        self.add_window_.mainloop()
+    
     def edit_window(self):
 
-        self.window = tk.Toplevel()
+        self.add_window_.destroy()
 
-        self.window.geometry("250x110+820+400")
+        edit_window = tk.Toplevel()
 
-        self.window.title("Editing")
+        edit_window.geometry("250x110+820+400")
 
-        self.window.iconbitmap("icons\\myvocabulary_icon.ico")
+        edit_window.title("Editing")
+
+        edit_window.iconbitmap("icons\\myvocabulary_icon.ico")
 
         edited_meaning = tk.StringVar()
 
         edited_meaning.set(self.translation)
 
-        edit_label = ttk.Label(self.window, text = "Type the meaning below")
+        edit_label = ttk.Label(edit_window, text = "Type the meaning below")
 
-        edit_entry = ttk.Entry(self.window, textvariable = edited_meaning)
+        edit_entry = ttk.Entry(edit_window, textvariable = edited_meaning)
 
-        edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), editing = True))
+        edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), external = True))
 
-        add_button = ttk.Button(self.window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), editing = True))
+        add_button = ttk.Button(edit_window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), external = edit_window))
 
         edit_label.pack(pady = 5)
 
@@ -93,7 +121,7 @@ class MyVocabulary(tk.Frame):
 
         add_button.pack(pady = 5)
 
-        self.window.mainloop()
+        edit_window.mainloop()
     
     def duplicate_checker(self):
         
@@ -110,9 +138,9 @@ class MyVocabulary(tk.Frame):
             
         return False
         
-    def add_to_vocab(self, word, editing = False):
+    def add_to_vocab(self, word, external = None):
 
-        if editing: 
+        if external: 
             if self.duplicate_checker(): return
         
         vocabulary = self.open_vocab("a", "vocabulary")
@@ -125,7 +153,7 @@ class MyVocabulary(tk.Frame):
 
         self.word_fill()
 
-        if editing: self.window.destroy()
+        if external: external.destroy()
 
     def search(self, event = None):
 
@@ -139,17 +167,7 @@ class MyVocabulary(tk.Frame):
 
         if self.duplicate_checker(): return
 
-        dialog_msg = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation)
-
-        dialog_win = messagebox.askyesno(title = "Meaning Found!", message = dialog_msg)
-
-        if dialog_win == True:
-
-            edit_dialog = messagebox.askyesno(title = "Any Edits?", message = "Would you like to edit the meaning of the word?")
-
-            if edit_dialog == True: self.edit_window()
-
-            else: self.add_to_vocab(self.translation)
+        self.add_window()
 
     def remove(self, event = None):
 
