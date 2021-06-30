@@ -60,6 +60,66 @@ class MyVocabulary(tk.Frame):
 
         for line in file_content:
             self.word_listbox.insert(0, line)
+    
+    def edit_window(self):
+
+        self.window = tk.Toplevel()
+
+        self.window.geometry("250x110+820+400")
+
+        self.window.title("Editing")
+
+        self.window.iconbitmap("icons\\myvocabulary_icon.ico")
+
+        edited_meaning = tk.StringVar()
+
+        edited_meaning.set(self.translation)
+
+        edit_label = tk.Label(self.window, text = "Type the meaning below")
+
+        edit_entry = tk.Entry(self.window, textvariable = edited_meaning)
+
+        add_button = tk.Button(self.window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), editing = True))
+
+        edit_label.pack(pady = 5)
+
+        edit_entry.pack(pady = 5)
+
+        add_button.pack(pady = 5)
+
+        self.window.mainloop()
+    
+    def duplicate_checker(self):
+        
+        file_content = self.open_vocab("r", "file_content")
+
+        for line in file_content:
+
+            word = line.split(">")[0].strip()
+
+            if self.search_word.get() == word:
+                warning_msg = "This word already exists!\n\n{}".format(line)
+                messagebox.showwarning(title = "Warning", message = warning_msg)
+                return True
+            
+        return False
+        
+    def add_to_vocab(self, word, editing = False):
+
+        if editing: 
+            if self.duplicate_checker(): return
+        
+        vocabulary = self.open_vocab("a", "vocabulary")
+
+        line = "{} > {}\n".format(self.search_word.get(), word)
+
+        vocabulary.write(line)
+
+        vocabulary.close()
+
+        self.word_fill()
+
+        if editing: self.window.destroy()
 
     def search(self):
 
@@ -71,32 +131,19 @@ class MyVocabulary(tk.Frame):
 
         self.translation = (translator.translate(self.search_word.get(), src = "en", dest = "tr").text).lower()
 
-        file_content = self.open_vocab("r", "file_content")
-
-        for line in file_content:
-
-            word = line.split(">")[0].strip()
-
-            if self.search_word.get() == word:
-                warning_msg = "This word already exists!\n\n{}".format(line)
-                messagebox.showwarning(title = "Warning", message = warning_msg)
-                return
+        if self.duplicate_checker(): return
 
         dialog_msg = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation)
 
         dialog_win = messagebox.askyesno(title = "Meaning Found!", message = dialog_msg)
 
         if dialog_win == True:
-    
-            vocabulary = self.open_vocab("a", "vocabulary")
 
-            line = "{} > {}\n".format(self.search_word.get(), self.translation)
+            edit_dialog = messagebox.askyesno(title = "Any Edits?", message = "Would you like to edit the meaning of the word?")
 
-            vocabulary.write(line)
+            if edit_dialog == True: self.edit_window()
 
-            vocabulary.close()
-
-            self.word_fill()
+            else: self.add_to_vocab(self.translation)
 
     def remove(self):
 
@@ -143,4 +190,5 @@ class MyVocabulary(tk.Frame):
 
         self.open_vocab("w")
 
-        messagebox.showinfo(title = "Welcome!", message = "Looks like this is the first time you're using MyVocabulary.\nWe've created a \"vocabulary.txt\" file for you, which is where you will be storing your words.")
+        messagebox.showinfo(title = "Welcome!",
+        message = "Looks like this is the first time you're using MyVocabulary.\nWe've created a \"vocabulary.txt\" file for you, which is where you will be storing your words.")
