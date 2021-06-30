@@ -135,8 +135,10 @@ class MyVocabulary(tk.Frame):
 
         info_msg = self.word_listbox.get(self.word_listbox.curselection())
 
-        messagebox.showinfo(title = "Word and Its Meaning", message = info_msg)
-    
+        word_meaning = messagebox.showinfo(title = "Word and Its Meaning", message = info_msg)
+
+        if word_meaning == "ok": self.word_listbox.select_clear(0, "end")
+        
     def welcome_popup(self):
 
         self.open_vocab("w")
