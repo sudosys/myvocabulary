@@ -12,6 +12,7 @@ class MyVocabulary(tk.Frame):
         self.lower_frame = tk.Frame(self.parent)
         self.lower_frame.pack(side = tk.BOTTOM)
         self.initGUI()
+
     
     def initGUI(self):
         try: self.open_vocab("r")
@@ -33,7 +34,9 @@ class MyVocabulary(tk.Frame):
         self.word_listbox_scrollbar.pack(side = tk.RIGHT, fill = tk.BOTH)
         self.word_listbox.config(yscrollcommand = self.word_listbox_scrollbar.set)
         self.word_listbox_scrollbar.config(command = self.word_listbox.yview)
+        self.word_listbox.bind("<Delete>", self.remove)
         self.search_box.pack(pady = 10)
+        self.search_box.bind("<Return>", self.search)
         self.search_button.pack(pady = 10)
         self.remove_button.pack(pady = 10)
         self.bottom_label.pack(side = tk.LEFT, pady = 10)
@@ -76,11 +79,13 @@ class MyVocabulary(tk.Frame):
 
         edited_meaning.set(self.translation)
 
-        edit_label = tk.Label(self.window, text = "Type the meaning below")
+        edit_label = ttk.Label(self.window, text = "Type the meaning below")
 
-        edit_entry = tk.Entry(self.window, textvariable = edited_meaning)
+        edit_entry = ttk.Entry(self.window, textvariable = edited_meaning)
 
-        add_button = tk.Button(self.window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), editing = True))
+        edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), editing = True))
+
+        add_button = ttk.Button(self.window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), editing = True))
 
         edit_label.pack(pady = 5)
 
@@ -122,7 +127,7 @@ class MyVocabulary(tk.Frame):
 
         if editing: self.window.destroy()
 
-    def search(self):
+    def search(self, event = None):
 
         if self.search_word.get() == "":
             messagebox.showerror(title = "Error", message = "You didn't enter any words!")
@@ -146,7 +151,7 @@ class MyVocabulary(tk.Frame):
 
             else: self.add_to_vocab(self.translation)
 
-    def remove(self):
+    def remove(self, event = None):
 
         if len(self.word_listbox.curselection()) == 0:
             messagebox.showerror(title = "Error", message = "You didn't select any words!")
