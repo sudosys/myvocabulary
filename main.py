@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from tkinter import messagebox
 import googletrans
 from PIL import ImageTk, Image
@@ -17,16 +18,16 @@ class MyVocabulary(tk.Frame):
         except: self.welcome_popup()
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
-        self.word_listbox_scrollbar = tk.Scrollbar(self.parent)
+        self.word_listbox_scrollbar = ttk.Scrollbar(self.parent)
         self.word_listbox.bind("<Double-Button>", self.listbox_dbclick)
         self.word_fill()
         self.search_word = tk.StringVar()
-        self.search_box = tk.Entry(self.lower_frame, textvariable = self.search_word)
-        self.search_button = tk.Button(self.lower_frame, text = "Search", command = self.search)
-        self.remove_button = tk.Button(self.lower_frame, text = "Remove Selected Word(s)", command = self.remove)
-        self.bottom_label = tk.Label(self.lower_frame, text = "Powered by Google Translate")
+        self.search_box = ttk.Entry(self.lower_frame, textvariable = self.search_word)
+        self.search_button = ttk.Button(self.lower_frame, text = "Search", command = self.search)
+        self.remove_button = ttk.Button(self.lower_frame, text = "Remove Selected Word(s)", command = self.remove)
+        self.bottom_label = ttk.Label(self.lower_frame, text = "Powered by Google Translate")
         self.gt_icon = ImageTk.PhotoImage(Image.open("icons\\google_translate_icon.ico"))
-        self.icon_label = tk.Label(self.lower_frame, image = self.gt_icon)
+        self.icon_label = ttk.Label(self.lower_frame, image = self.gt_icon)
         # Packings and configurations #
         self.word_listbox.pack(side = tk.LEFT, fill = tk.BOTH, expand = True)
         self.word_listbox_scrollbar.pack(side = tk.RIGHT, fill = tk.BOTH)
