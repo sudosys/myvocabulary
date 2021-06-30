@@ -151,28 +151,20 @@ class MyVocabulary(tk.Frame):
             messagebox.showerror(title = "Error", message = "You didn't select any words!")
             return
         
-        for index in self.word_listbox.curselection():
+        lines_to_delete = [self.word_listbox.get(index) for index in self.word_listbox.curselection()]
 
-            line_to_delete = self.word_listbox.get(index)
+        file_content = self.open_vocab("r", "file_content")
 
-            file_content = self.open_vocab("r", "file_content")
+        for line_to_delete in lines_to_delete: del file_content[file_content.index(line_to_delete)]
 
-            ctrl = 0
+        vocabulary = self.open_vocab("w", "vocabulary")
 
-            for line in file_content:
-
-                if line_to_delete == line: del file_content[ctrl]
-                
-                ctrl += 1
-
-            vocabulary = self.open_vocab("w", "vocabulary")
-
-            for line in file_content: vocabulary.write(line)
+        for line in file_content: vocabulary.write(line)
 
         vocabulary.close()
 
         self.word_fill()
-    
+
     def listbox_dbclick(self, event):
 
         if len(self.word_listbox.curselection()) > 1:
