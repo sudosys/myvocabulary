@@ -12,7 +12,6 @@ class MyVocabulary(tk.Frame):
         self.lower_frame = tk.Frame(self.parent)
         self.lower_frame.pack(side = tk.BOTTOM)
         self.initGUI()
-
     
     def initGUI(self):
         try: self.open_vocab("r")
@@ -36,6 +35,9 @@ class MyVocabulary(tk.Frame):
         self.word_listbox.bind("<Double-Button>", self.listbox_dbclick_window)
         self.word_listbox.bind("<Delete>", self.remove)
         self.search_box.pack(pady = 10)
+        self.placeholder_text = "Type here to search..."
+        self.search_word.set(self.placeholder_text)
+        self.entry_focus_binding(True)
         self.search_box.bind("<Return>", self.search)
         self.search_button.pack(pady = 10)
         self.remove_button.pack(pady = 10)
@@ -64,6 +66,12 @@ class MyVocabulary(tk.Frame):
         for line in file_content:
             self.word_listbox.insert(0, line)
     
+    def entry_focus_binding(self, binding):
+
+        if binding == True: self.search_box.bind("<FocusIn>", lambda event: self.search_word.set(""))
+        
+        elif binding == False: self.search_box.unbind("<FocusIn>")
+
     def add_to_vocab_window(self):
 
         self.add_window = tk.Toplevel()
@@ -78,9 +86,9 @@ class MyVocabulary(tk.Frame):
 
         question_label = ttk.Label(self.add_window, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation))
 
-        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation, external = self.add_window), self.search_box.delete(0, "end")])
+        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation, external = self.add_window), self.search_box.delete(0, "end"), self.entry_focus_binding(True)])
         edit_button = ttk.Button(self.add_window, text = "Edit", command = self.edit_meaning_window)
-        no_button = ttk.Button(self.add_window, text = "No", command = lambda: [self.add_window.destroy(), self.search_box.delete(0, "end")])
+        no_button = ttk.Button(self.add_window, text = "No", command = lambda: [self.add_window.destroy(), self.search_box.delete(0, "end"), self.entry_focus_binding(True)])
 
         question_label.place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
         no_button.place(relx = 1.0, rely = 1.0, anchor = tk.SE)
@@ -178,8 +186,11 @@ class MyVocabulary(tk.Frame):
 
     def search(self, event = None):
 
-        if self.search_word.get() == "":
+        self.entry_focus_binding(False)
+
+        if self.search_word.get() == "" or self.search_word.get() == self.placeholder_text:
             messagebox.showerror(title = "Error", message = "You didn't enter any words!")
+            self.entry_focus_binding(True)
             return
         
         translator = googletrans.Translator()
