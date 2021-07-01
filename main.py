@@ -20,7 +20,6 @@ class MyVocabulary(tk.Frame):
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
         self.word_listbox_scrollbar = ttk.Scrollbar(self.parent)
-        self.word_listbox.bind("<Double-Button>", self.listbox_dbclick)
         self.word_fill()
         self.search_word = tk.StringVar()
         self.search_box = ttk.Entry(self.lower_frame, textvariable = self.search_word)
@@ -34,6 +33,7 @@ class MyVocabulary(tk.Frame):
         self.word_listbox_scrollbar.pack(side = tk.RIGHT, fill = tk.BOTH)
         self.word_listbox.config(yscrollcommand = self.word_listbox_scrollbar.set)
         self.word_listbox_scrollbar.config(command = self.word_listbox.yview)
+        self.word_listbox.bind("<Double-Button>", self.listbox_dbclick_window)
         self.word_listbox.bind("<Delete>", self.remove)
         self.search_box.pack(pady = 10)
         self.search_box.bind("<Return>", self.search)
@@ -84,7 +84,6 @@ class MyVocabulary(tk.Frame):
         no_button = ttk.Button(self.add_window, text = "No", command = self.add_window.destroy)
 
         question_label.place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
-
         no_button.place(relx = 1.0, rely = 1.0, anchor = tk.SE)
         edit_button.place(relx = 0.75, rely = 1.0, anchor = tk.SE)
         yes_button.place(relx = 0.5, rely = 1.0, anchor = tk.SE)
@@ -125,6 +124,32 @@ class MyVocabulary(tk.Frame):
 
         edit_window.mainloop()
     
+    def listbox_dbclick_window(self, event):
+
+        if len(self.word_listbox.curselection()) > 1:
+
+            messagebox.showerror(title = "Error", message = "You must select only one word!")
+            return
+
+        dbclick_window = tk.Toplevel()
+
+        dbclick_window.geometry("365x140+760+400")
+
+        dbclick_window.title("Word and Its Meaning")
+
+        dbclick_window.iconbitmap("icons\\myvocabulary_icon.ico")
+
+        dbclick_window.resizable(False, False)
+
+        word_meaning_label = ttk.Label(dbclick_window, text = self.word_listbox.get(self.word_listbox.curselection()), wraplength = 350, justify = tk.CENTER)
+
+        ok_button = ttk.Button(dbclick_window, text = "OK", command = lambda: [dbclick_window.destroy(), self.word_listbox.select_clear(0, "end")])
+
+        word_meaning_label.place(relx = 0.5, rely = 0.5, anchor = tk.CENTER)
+        ok_button.place(relx = 1.0, rely = 1.0, anchor = tk.SE)
+
+        dbclick_window.mainloop()
+
     def duplicate_checker(self):
         
         file_content = self.open_vocab("r", "file_content")
@@ -190,19 +215,6 @@ class MyVocabulary(tk.Frame):
         vocabulary.close()
 
         self.word_fill()
-
-    def listbox_dbclick(self, event):
-
-        if len(self.word_listbox.curselection()) > 1:
-
-            messagebox.showerror(title = "Error", message = "You must select only one word!")
-            return
-
-        info_msg = self.word_listbox.get(self.word_listbox.curselection())
-
-        word_meaning = messagebox.showinfo(title = "Word and Its Meaning", message = info_msg)
-
-        if word_meaning == "ok": self.word_listbox.select_clear(0, "end")
         
     def welcome_popup(self):
 
