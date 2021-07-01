@@ -65,23 +65,23 @@ class MyVocabulary(tk.Frame):
         for line in file_content:
             self.word_listbox.insert(0, line)
     
-    def add_window(self):
+    def add_to_vocab_window(self):
 
-        self.add_window_ = tk.Tk()
+        self.add_window = tk.Toplevel()
 
-        self.add_window_.geometry("365x140+760+400")
+        self.add_window.geometry("365x140+760+400")
 
-        self.add_window_.iconbitmap("icons\\myvocabulary_icon.ico")
+        self.add_window.title("Meaning Found!")
 
-        self.add_window_.resizable(False, False)
+        self.add_window.iconbitmap("icons\\myvocabulary_icon.ico")
 
-        self.add_window_.title("Meaning Found!")
+        self.add_window.resizable(False, False)
 
-        question_label = ttk.Label(self.add_window_, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation))
+        question_label = ttk.Label(self.add_window, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation))
 
-        yes_button = ttk.Button(self.add_window_, text = "Yes", command = lambda: self.add_to_vocab(self.translation, external = self.add_window_))
-        edit_button = ttk.Button(self.add_window_, text = "Edit", command = self.edit_window)
-        no_button = ttk.Button(self.add_window_, text = "No", command = self.add_window_.destroy)
+        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: self.add_to_vocab(self.translation, external = self.add_window))
+        edit_button = ttk.Button(self.add_window, text = "Edit", command = self.edit_meaning_window)
+        no_button = ttk.Button(self.add_window, text = "No", command = self.add_window.destroy)
 
         question_label.place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
 
@@ -89,11 +89,11 @@ class MyVocabulary(tk.Frame):
         edit_button.place(relx = 0.75, rely = 1.0, anchor = tk.SE)
         yes_button.place(relx = 0.5, rely = 1.0, anchor = tk.SE)
 
-        self.add_window_.mainloop()
+        self.add_window.mainloop()
     
-    def edit_window(self):
+    def edit_meaning_window(self):
 
-        self.add_window_.destroy()
+        self.add_window.destroy()
 
         edit_window = tk.Toplevel()
 
@@ -102,6 +102,8 @@ class MyVocabulary(tk.Frame):
         edit_window.title("Editing")
 
         edit_window.iconbitmap("icons\\myvocabulary_icon.ico")
+
+        edit_window.resizable(False, False)
 
         edited_meaning = tk.StringVar()
 
@@ -167,7 +169,7 @@ class MyVocabulary(tk.Frame):
 
         if self.duplicate_checker(): return
 
-        self.add_window()
+        self.add_to_vocab_window()
 
     def remove(self, event = None):
 
