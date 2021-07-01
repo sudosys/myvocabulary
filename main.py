@@ -47,7 +47,6 @@ class MyVocabulary(tk.Frame):
         vocabulary = open("vocabulary.txt", mode, encoding = "utf-8")
 
         if mode == "r":
-        
             file_content = vocabulary.readlines()
             vocabulary.close()
 
@@ -79,9 +78,9 @@ class MyVocabulary(tk.Frame):
 
         question_label = ttk.Label(self.add_window, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation))
 
-        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: self.add_to_vocab(self.translation, external = self.add_window))
+        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation, external = self.add_window), self.search_box.delete(0, "end")])
         edit_button = ttk.Button(self.add_window, text = "Edit", command = self.edit_meaning_window)
-        no_button = ttk.Button(self.add_window, text = "No", command = self.add_window.destroy)
+        no_button = ttk.Button(self.add_window, text = "No", command = lambda: [self.add_window.destroy(), self.search_box.delete(0, "end")])
 
         question_label.place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
         no_button.place(relx = 1.0, rely = 1.0, anchor = tk.SE)
@@ -112,9 +111,9 @@ class MyVocabulary(tk.Frame):
 
         edit_entry = ttk.Entry(edit_window, textvariable = edited_meaning)
 
-        edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), external = True))
+        edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), external = edit_window))
 
-        add_button = ttk.Button(edit_window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), external = edit_window))
+        add_button = ttk.Button(edit_window, text = "Add to Vocabulary", command = lambda: [self.add_to_vocab(edited_meaning.get(), external = edit_window), self.search_box.delete(0, "end")])
 
         edit_label.pack(pady = 5)
 
@@ -127,7 +126,6 @@ class MyVocabulary(tk.Frame):
     def listbox_dbclick_window(self, event):
 
         if len(self.word_listbox.curselection()) > 1:
-
             messagebox.showerror(title = "Error", message = "You must select only one word!")
             return
 
@@ -142,7 +140,6 @@ class MyVocabulary(tk.Frame):
         dbclick_window.resizable(False, False)
 
         word_meaning_label = ttk.Label(dbclick_window, text = self.word_listbox.get(self.word_listbox.curselection()), wraplength = 350, justify = tk.CENTER)
-
         ok_button = ttk.Button(dbclick_window, text = "OK", command = lambda: [dbclick_window.destroy(), self.word_listbox.select_clear(0, "end")])
 
         word_meaning_label.place(relx = 0.5, rely = 0.5, anchor = tk.CENTER)
@@ -167,9 +164,6 @@ class MyVocabulary(tk.Frame):
         
     def add_to_vocab(self, word, external = None):
 
-        if external: 
-            if self.duplicate_checker(): return
-        
         vocabulary = self.open_vocab("a", "vocabulary")
 
         line = "{} > {}\n".format(self.search_word.get(), word)
@@ -192,7 +186,9 @@ class MyVocabulary(tk.Frame):
 
         self.translation = (translator.translate(self.search_word.get(), src = "en", dest = "tr").text).lower()
 
-        if self.duplicate_checker(): return
+        if self.duplicate_checker():
+            self.search_box.delete(0, "end")
+            return
 
         self.add_to_vocab_window()
 
