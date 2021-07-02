@@ -9,6 +9,7 @@ class MyVocabulary(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
+        self.translator = googletrans.Translator()
         self.lower_frame = tk.Frame(self.parent)
         self.lower_frame.pack(side = tk.BOTTOM)
         self.initGUI()
@@ -123,9 +124,11 @@ class MyVocabulary(tk.Frame):
 
         self.add_window.resizable(False, False)
 
-        if self.src_lang_code.get() == "auto": self.src_lang.set(googletrans.LANGUAGES[self.translation.src].capitalize())
+        src_lang_name = self.src_lang.get()
 
-        question_label = ttk.Label(self.add_window, text = "{}: {}\n\n{}: {}\n\nWould you like to add this word to your vocabulary?".format(self.src_lang.get(), self.search_word.get(), self.dest_lang.get(), self.translation.text.lower()), wraplength = 350, justify = tk.CENTER)
+        if self.src_lang_code.get() == "auto": src_lang_name = googletrans.LANGUAGES[self.translation.src].capitalize()
+
+        question_label = ttk.Label(self.add_window, text = "{}: {}\n\n{}: {}\n\nWould you like to add this word to your vocabulary?".format(src_lang_name, self.search_word.get(), self.dest_lang.get(), self.translation.text.lower()), wraplength = 350, justify = tk.CENTER)
 
         yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation.text.lower(), external = self.add_window), self.search_box.delete(0, "end")])
         edit_button = ttk.Button(self.add_window, text = "Edit", command = self.edit_meaning_window)
@@ -194,7 +197,11 @@ class MyVocabulary(tk.Frame):
 
         dbclick_window.resizable(False, False)
 
-        word_meaning_label = ttk.Label(dbclick_window, text = self.word_listbox.get(self.word_listbox.curselection()), wraplength = 350, justify = tk.CENTER)
+        word_and_meaning = self.word_listbox.get(self.word_listbox.curselection()).split(">")
+
+        word_meaning_text = googletrans.LANGUAGES[self.translator.detect(word_and_meaning[0]).lang].capitalize() + ": " + word_and_meaning[0] + "\n\n" + googletrans.LANGUAGES[self.translator.detect(word_and_meaning[1]).lang].capitalize() + ": " + word_and_meaning[1]
+
+        word_meaning_label = ttk.Label(dbclick_window, text = word_meaning_text, wraplength = 350, justify = tk.CENTER)
         ok_button = ttk.Button(dbclick_window, text = "OK", command = lambda: [dbclick_window.destroy(), self.word_listbox.select_clear(0, "end")])
 
         word_meaning_label.place(relx = 0.5, rely = 0.5, anchor = tk.CENTER)
@@ -241,10 +248,8 @@ class MyVocabulary(tk.Frame):
         if self.search_word.get() == "" or self.search_word.get() == self.placeholder_text:
             messagebox.showerror(title = "Error", message = "You didn't enter any words!")
             return
-        
-        translator = googletrans.Translator()
 
-        self.translation = (translator.translate(self.search_word.get(), src = self.src_lang_code.get(), dest = self.dest_lang_code.get()))
+        self.translation = (self.translator.translate(self.search_word.get(), src = self.src_lang_code.get(), dest = self.dest_lang_code.get()))
 
         if self.duplicate_checker():
             self.search_box.delete(0, "end")
