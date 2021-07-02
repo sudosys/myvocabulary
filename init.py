@@ -2,7 +2,7 @@ from main import *
 
 root = tk.Tk()
 
-root.geometry("300x600+800+200")
+root.geometry("300x750+800+200")
 
 root.resizable(False, False)
 
