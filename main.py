@@ -12,22 +12,23 @@ class MyVocabulary(tk.Frame):
         self.lower_frame = tk.Frame(self.parent)
         self.lower_frame.pack(side = tk.BOTTOM)
         self.initGUI()
-    
+
     def initGUI(self):
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
         self.word_listbox_scrollbar = ttk.Scrollbar(self.parent)
         self.search_word = tk.StringVar()
-        self.search_box = ttk.Entry(self.lower_frame, textvariable = self.search_word)
+        self.search_box = ttk.Entry(self.lower_frame, textvariable = self.search_word, width = 50)
         self.search_button = ttk.Button(self.lower_frame, text = "Search", command = self.search)
         self.remove_button = ttk.Button(self.lower_frame, text = "Remove Selected Word(s)", command = self.remove)
         self.src_lang_label = ttk.Label(self.lower_frame, text = "Source Language")
         self.src_lang, self.src_lang_code = tk.StringVar(), tk.StringVar()
-        self.langs = {"English": "en", "Türkçe": "tr", "Français": "fr"}
+        self.langs = {"Auto": "auto", "English": "en", "Turkish (Türkçe)": "tr", "French (Français)": "fr", "German (Deutsch)": "de"}
         self.src_lang_combobox = ttk.Combobox(self.lower_frame, width = 15, state = "readonly", values = list(self.langs.keys()), textvariable = self.src_lang)
         self.dest_lang_label = ttk.Label(self.lower_frame, text = "Target Language")
         self.dest_lang, self.dest_lang_code = tk.StringVar(), tk.StringVar()
-        self.dest_lang_combobox = ttk.Combobox(self.lower_frame, width = 15, state = "readonly", values = list(self.langs.keys()), textvariable = self.dest_lang)
+        self.dest_lang_combobox = ttk.Combobox(self.lower_frame, width = 15, state = "readonly", values = list(self.langs.keys())[1:], textvariable = self.dest_lang)
+        self.lang_swap_button = ttk.Button(self.lower_frame, text = "<>", width = 3, command = self.lang_swap)
         self.bottom_label = ttk.Label(self.lower_frame, text = "Powered by Google Translate")
         self.gt_icon = ImageTk.PhotoImage(Image.open("icons\\google_translate_icon.ico"))
         self.icon_label = ttk.Label(self.lower_frame, image = self.gt_icon)
@@ -38,24 +39,25 @@ class MyVocabulary(tk.Frame):
         self.word_listbox_scrollbar.config(command = self.word_listbox.yview)
         self.word_listbox.bind("<Double-Button>", self.listbox_dbclick_window)
         self.word_listbox.bind("<Delete>", self.remove)
-        self.search_box.grid(row = 0, column = 0, columnspan = 2, pady = 10)
+        self.search_box.grid(row = 0, column = 0, columnspan = 3, pady = 10)
         self.placeholder_text = "Type here to search..."
         self.search_word.set(self.placeholder_text)
         self.search_box.bind("<FocusIn>", lambda event: self.search_word.set(""))
         self.search_box.bind("<FocusOut>", self.focusout_behaviour)
         self.search_box.bind("<Return>", self.search)
-        self.search_button.grid(row = 1, column = 0, columnspan = 2, pady = 10)
-        self.remove_button.grid(row = 2, column = 0, columnspan = 2, pady = 10)
+        self.search_button.grid(row = 1, column = 0, columnspan = 3, pady = 10)
+        self.remove_button.grid(row = 2, column = 0, columnspan = 3, pady = 10)
         self.src_lang_label.grid(row = 3, column = 0, padx = 10, pady = 10)
-        self.dest_lang_label.grid(row = 3, column = 1, padx = 10, pady = 10)
+        self.dest_lang_label.grid(row = 3, column = 2, padx = 10, pady = 10)
         self.src_lang_combobox.grid(row = 4, column = 0, padx = 10, pady = 10)
-        self.src_lang_combobox.current(0)
+        self.src_lang_combobox.current(1)
         self.src_lang_combobox.bind("<<ComboboxSelected>>", lambda event: self.src_lang_code.set(self.langs[self.src_lang.get()]))
-        self.dest_lang_combobox.grid(row = 4, column = 1, padx = 10, pady = 10)
+        self.lang_swap_button.grid(row = 4, column = 1, padx = 10, pady = 10)
+        self.dest_lang_combobox.grid(row = 4, column = 2, padx = 10, pady = 10)
         self.dest_lang_combobox.current(1)
         self.dest_lang_combobox.bind("<<ComboboxSelected>>", lambda event: self.dest_lang_code.set(self.langs[self.dest_lang.get()]))
-        self.bottom_label.grid(row = 5, column = 0, columnspan = 2, pady = 10)
-        self.icon_label.grid(row = 6, column = 0, columnspan = 2, pady = 10)
+        self.bottom_label.grid(row = 5, column = 0, columnspan = 3, pady = 10)
+        self.icon_label.grid(row = 6, column = 0, columnspan = 3, pady = 10)
         # Checking if "vocabulary.txt" exists, otherwise launch welcome popup
         try: self.open_vocab("r")
         except FileNotFoundError:
@@ -95,6 +97,17 @@ class MyVocabulary(tk.Frame):
         if self.search_word.get() != self.placeholder_text and self.search_word.get() != "": return
 
         elif self.search_word.get() == "": self.search_word.set(self.placeholder_text)
+    
+    def lang_swap(self):
+        
+        temp_index = self.src_lang_combobox.current()
+        temp_lang = self.src_lang.get()
+
+        self.src_lang_combobox.current(self.dest_lang_combobox.current()+1)
+        self.src_lang_code.set(self.langs[self.dest_lang.get()])
+
+        self.dest_lang_combobox.current(temp_index-1)
+        self.dest_lang_code.set(self.langs[temp_lang])
 
     def add_to_vocab_window(self):
 
@@ -199,7 +212,6 @@ class MyVocabulary(tk.Frame):
             if self.search_word.get() == word:
                 warning_msg = "This word already exists!\n\n{}".format(line)
                 messagebox.showwarning(title = "Warning", message = warning_msg)
-                self.entry_focus_binding(True)
                 return True
             
         return False
