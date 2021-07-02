@@ -99,6 +99,9 @@ class MyVocabulary(tk.Frame):
         edit_button.place(relx = 0.75, rely = 1.0, anchor = tk.SE)
         yes_button.place(relx = 0.5, rely = 1.0, anchor = tk.SE)
 
+        self.add_window.focus_set()
+        self.add_window.grab_set()
+
         self.add_window.mainloop()
     
     def edit_meaning_window(self):
@@ -133,6 +136,9 @@ class MyVocabulary(tk.Frame):
 
         add_button.pack(pady = 5)
 
+        edit_window.focus_set()
+        edit_window.grab_set()
+
         edit_window.mainloop()
     
     def listbox_dbclick_window(self, event):
@@ -156,6 +162,9 @@ class MyVocabulary(tk.Frame):
 
         word_meaning_label.place(relx = 0.5, rely = 0.5, anchor = tk.CENTER)
         ok_button.place(relx = 1.0, rely = 1.0, anchor = tk.SE)
+
+        dbclick_window.focus_set()
+        dbclick_window.grab_set()
 
         dbclick_window.mainloop()
 
