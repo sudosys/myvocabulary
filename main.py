@@ -121,7 +121,7 @@ class MyVocabulary(tk.Frame):
 
         edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), external = edit_window))
 
-        add_button = ttk.Button(edit_window, text = "Add to Vocabulary", command = lambda: [self.add_to_vocab(edited_meaning.get(), external = edit_window), self.search_box.delete(0, "end")])
+        add_button = ttk.Button(edit_window, text = "Add to Vocabulary", command = lambda: self.add_to_vocab(edited_meaning.get(), external = edit_window))
 
         edit_label.pack(pady = 5)
 
@@ -182,7 +182,9 @@ class MyVocabulary(tk.Frame):
 
         self.word_fill()
 
-        if external: external.destroy()
+        if external:
+            self.search_box.delete(0, "end")
+            external.destroy()
 
     def search(self, event = None):
 
