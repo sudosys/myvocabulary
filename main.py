@@ -22,15 +22,16 @@ class MyVocabulary(tk.Frame):
         self.search_button = ttk.Button(self.lower_frame, text = "Search", command = self.search)
         self.remove_button = ttk.Button(self.lower_frame, text = "Remove Selected Word(s)", command = self.remove)
         self.src_lang_label = ttk.Label(self.lower_frame, text = "Source Language")
-        self.src_lang = tk.StringVar()
-        self.src_lang_combobox =ttk.Combobox(self.lower_frame, width = 15, textvariable = self.src_lang)
-        self.target_lang_label = ttk.Label(self.lower_frame, text = "Target Language")
-        self.target_lang = tk.StringVar()
-        self.target_lang_combobox =ttk.Combobox(self.lower_frame, width = 15, textvariable = self.target_lang)
+        self.src_lang, self.src_lang_code = tk.StringVar(), tk.StringVar()
+        self.langs = {"English": "en", "Türkçe": "tr", "Français": "fr"}
+        self.src_lang_combobox = ttk.Combobox(self.lower_frame, width = 15, state = "readonly", values = list(self.langs.keys()), textvariable = self.src_lang)
+        self.dest_lang_label = ttk.Label(self.lower_frame, text = "Target Language")
+        self.dest_lang, self.dest_lang_code = tk.StringVar(), tk.StringVar()
+        self.dest_lang_combobox = ttk.Combobox(self.lower_frame, width = 15, state = "readonly", values = list(self.langs.keys()), textvariable = self.dest_lang)
         self.bottom_label = ttk.Label(self.lower_frame, text = "Powered by Google Translate")
         self.gt_icon = ImageTk.PhotoImage(Image.open("icons\\google_translate_icon.ico"))
         self.icon_label = ttk.Label(self.lower_frame, image = self.gt_icon)
-        # Packings and configurations #
+        # Widget placements and configurations
         self.word_listbox.pack(side = tk.LEFT, fill = tk.BOTH, expand = True)
         self.word_listbox_scrollbar.pack(side = tk.RIGHT, fill = tk.BOTH)
         self.word_listbox.config(yscrollcommand = self.word_listbox_scrollbar.set)
@@ -46,17 +47,26 @@ class MyVocabulary(tk.Frame):
         self.search_button.grid(row = 1, column = 0, columnspan = 2, pady = 10)
         self.remove_button.grid(row = 2, column = 0, columnspan = 2, pady = 10)
         self.src_lang_label.grid(row = 3, column = 0, padx = 10, pady = 10)
-        self.target_lang_label.grid(row = 3, column = 1, padx = 10, pady = 10)
+        self.dest_lang_label.grid(row = 3, column = 1, padx = 10, pady = 10)
         self.src_lang_combobox.grid(row = 4, column = 0, padx = 10, pady = 10)
-        self.target_lang_combobox.grid(row = 4, column = 1, padx = 10, pady = 10)
+        self.src_lang_combobox.current(0)
+        self.src_lang_combobox.bind("<<ComboboxSelected>>", lambda event: self.src_lang_code.set(self.langs[self.src_lang.get()]))
+        self.dest_lang_combobox.grid(row = 4, column = 1, padx = 10, pady = 10)
+        self.dest_lang_combobox.current(1)
+        self.dest_lang_combobox.bind("<<ComboboxSelected>>", lambda event: self.dest_lang_code.set(self.langs[self.dest_lang.get()]))
         self.bottom_label.grid(row = 5, column = 0, columnspan = 2, pady = 10)
         self.icon_label.grid(row = 6, column = 0, columnspan = 2, pady = 10)
+        # Checking if "vocabulary.txt" exists, otherwise launch welcome popup
         try: self.open_vocab("r")
         except FileNotFoundError:
             self.open_vocab("w")
             messagebox.showinfo(title = "Welcome!",
             message = "Looks like this is the first time you're using MyVocabulary.\nWe've created a \"vocabulary.txt\" file for you, which is where you will be storing your words.")
+        
         self.word_fill()
+        # Initially setting default language codes
+        self.src_lang_code.set(self.langs[self.src_lang.get()])
+        self.dest_lang_code.set(self.langs[self.dest_lang.get()])
 
     def open_vocab(self, mode, return_what = None):
 
@@ -218,7 +228,7 @@ class MyVocabulary(tk.Frame):
         
         translator = googletrans.Translator()
 
-        self.translation = (translator.translate(self.search_word.get(), src = "en", dest = "tr").text).lower()
+        self.translation = (translator.translate(self.search_word.get(), src = self.src_lang_code.get(), dest = self.dest_lang_code.get()).text).lower()
 
         if self.duplicate_checker():
             self.search_box.delete(0, "end")
