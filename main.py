@@ -22,7 +22,7 @@ class MyVocabulary(tk.Frame):
         self.word_fill()
         self.search_word = tk.StringVar()
         self.search_box = ttk.Entry(self.lower_frame, textvariable = self.search_word)
-        self.search_button = ttk.Button(self.lower_frame, text = "Search", command = self.search)
+        self.search_button = ttk.Button(self.lower_frame, text = "Search", command = lambda: [self.search_box.unbind("<FocusOut>"), self.search()])
         self.remove_button = ttk.Button(self.lower_frame, text = "Remove Selected Word(s)", command = self.remove)
         self.bottom_label = ttk.Label(self.lower_frame, text = "Powered by Google Translate")
         self.gt_icon = ImageTk.PhotoImage(Image.open("icons\\google_translate_icon.ico"))
@@ -68,9 +68,13 @@ class MyVocabulary(tk.Frame):
     
     def entry_focus_binding(self, binding):
 
-        if binding == True: self.search_box.bind("<FocusIn>", lambda event: self.search_word.set(""))
+        if binding == True: 
+            self.search_box.bind("<FocusIn>", lambda event: self.search_word.set(""))
+            self.search_box.bind("<FocusOut>", lambda event: self.search_word.set(self.placeholder_text))
         
-        elif binding == False: self.search_box.unbind("<FocusIn>")
+        elif binding == False:
+            self.search_box.unbind("<FocusIn>")
+            self.search_box.unbind("<FocusOut>")
 
     def add_to_vocab_window(self):
 
@@ -166,6 +170,7 @@ class MyVocabulary(tk.Frame):
             if self.search_word.get() == word:
                 warning_msg = "This word already exists!\n\n{}".format(line)
                 messagebox.showwarning(title = "Warning", message = warning_msg)
+                self.entry_focus_binding(True)
                 return True
             
         return False
