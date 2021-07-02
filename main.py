@@ -14,12 +14,9 @@ class MyVocabulary(tk.Frame):
         self.initGUI()
     
     def initGUI(self):
-        try: self.open_vocab("r")
-        except: self.welcome_popup()
         self.parent.title("MyVocabulary")
         self.word_listbox = tk.Listbox(self.parent, selectmode = "multiple")
         self.word_listbox_scrollbar = ttk.Scrollbar(self.parent)
-        self.word_fill()
         self.search_word = tk.StringVar()
         self.search_box = ttk.Entry(self.lower_frame, textvariable = self.search_word)
         self.search_button = ttk.Button(self.lower_frame, text = "Search", command = self.search)
@@ -44,6 +41,12 @@ class MyVocabulary(tk.Frame):
         self.remove_button.pack(pady = 10)
         self.bottom_label.pack(side = tk.LEFT, pady = 10)
         self.icon_label.pack(side = tk.RIGHT, pady = 10)
+        try: self.open_vocab("r")
+        except FileNotFoundError:
+            self.open_vocab("w")
+            messagebox.showinfo(title = "Welcome!",
+            message = "Looks like this is the first time you're using MyVocabulary.\nWe've created a \"vocabulary.txt\" file for you, which is where you will be storing your words.")
+        self.word_fill()
 
     def open_vocab(self, mode, return_what = None):
 
@@ -85,7 +88,7 @@ class MyVocabulary(tk.Frame):
 
         self.add_window.resizable(False, False)
 
-        question_label = ttk.Label(self.add_window, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation))
+        question_label = ttk.Label(self.add_window, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation), wraplength = 350, justify = tk.CENTER)
 
         yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation, external = self.add_window), self.search_box.delete(0, "end")])
         edit_button = ttk.Button(self.add_window, text = "Edit", command = self.edit_meaning_window)
@@ -232,10 +235,3 @@ class MyVocabulary(tk.Frame):
         vocabulary.close()
 
         self.word_fill()
-        
-    def welcome_popup(self):
-
-        self.open_vocab("w")
-
-        messagebox.showinfo(title = "Welcome!",
-        message = "Looks like this is the first time you're using MyVocabulary.\nWe've created a \"vocabulary.txt\" file for you, which is where you will be storing your words.")
