@@ -99,6 +99,8 @@ class MyVocabulary(tk.Frame):
         elif self.search_word.get() == "": self.search_word.set(self.placeholder_text)
     
     def lang_swap(self):
+
+        if self.src_lang_combobox.current() == 0: self.src_lang_combobox.current(self.src_lang_combobox.current()+1)
         
         temp_index = self.src_lang_combobox.current()
         temp_lang = self.src_lang.get()
@@ -113,7 +115,7 @@ class MyVocabulary(tk.Frame):
 
         self.add_window = tk.Toplevel()
 
-        self.add_window.geometry("365x140+760+400")
+        self.add_window.geometry("365x140+780+500")
 
         self.add_window.title("Meaning Found!")
 
@@ -121,9 +123,11 @@ class MyVocabulary(tk.Frame):
 
         self.add_window.resizable(False, False)
 
-        question_label = ttk.Label(self.add_window, text = "{} > {}\n\nWould you like to add this word to your vocabulary?".format(self.search_word.get(), self.translation), wraplength = 350, justify = tk.CENTER)
+        if self.src_lang_code.get() == "auto": self.src_lang.set(googletrans.LANGUAGES[self.translation.src].capitalize())
 
-        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation, external = self.add_window), self.search_box.delete(0, "end")])
+        question_label = ttk.Label(self.add_window, text = "{}: {}\n\n{}: {}\n\nWould you like to add this word to your vocabulary?".format(self.src_lang.get(), self.search_word.get(), self.dest_lang.get(), self.translation.text.lower()), wraplength = 350, justify = tk.CENTER)
+
+        yes_button = ttk.Button(self.add_window, text = "Yes", command = lambda: [self.add_to_vocab(self.translation.text.lower(), external = self.add_window), self.search_box.delete(0, "end")])
         edit_button = ttk.Button(self.add_window, text = "Edit", command = self.edit_meaning_window)
         no_button = ttk.Button(self.add_window, text = "No", command = lambda: [self.add_window.destroy(), self.search_box.delete(0, "end")])
 
@@ -143,7 +147,7 @@ class MyVocabulary(tk.Frame):
 
         edit_window = tk.Toplevel()
 
-        edit_window.geometry("250x110+820+400")
+        edit_window.geometry("250x110+840+500")
 
         edit_window.title("Editing")
 
@@ -153,7 +157,7 @@ class MyVocabulary(tk.Frame):
 
         edited_meaning = tk.StringVar()
 
-        edited_meaning.set(self.translation)
+        edited_meaning.set(self.translation.text.lower())
 
         edit_label = ttk.Label(edit_window, text = "Type the meaning below")
 
@@ -182,7 +186,7 @@ class MyVocabulary(tk.Frame):
 
         dbclick_window = tk.Toplevel()
 
-        dbclick_window.geometry("365x140+760+400")
+        dbclick_window.geometry("365x140+780+500")
 
         dbclick_window.title("Word and Its Meaning")
 
@@ -240,7 +244,7 @@ class MyVocabulary(tk.Frame):
         
         translator = googletrans.Translator()
 
-        self.translation = (translator.translate(self.search_word.get(), src = self.src_lang_code.get(), dest = self.dest_lang_code.get()).text).lower()
+        self.translation = (translator.translate(self.search_word.get(), src = self.src_lang_code.get(), dest = self.dest_lang_code.get()))
 
         if self.duplicate_checker():
             self.search_box.delete(0, "end")
