@@ -149,7 +149,7 @@ class MyVocabulary(tk.Frame):
 
         edit_window = tk.Toplevel()
 
-        edit_window.geometry("250x110+840+500")
+        edit_window.geometry("350x110+780+500")
 
         edit_window.title("Editing")
 
@@ -161,9 +161,9 @@ class MyVocabulary(tk.Frame):
 
         edited_meaning.set(self.translation.text.lower())
 
-        edit_label = ttk.Label(edit_window, text = "Type the meaning below")
+        edit_label = ttk.Label(edit_window, text = "Type the new meaning below")
 
-        edit_entry = ttk.Entry(edit_window, textvariable = edited_meaning)
+        edit_entry = ttk.Entry(edit_window, textvariable = edited_meaning, width = 50)
 
         edit_entry.bind("<Return>", lambda event = None: self.add_to_vocab(edited_meaning.get(), external = edit_window))
 
@@ -198,7 +198,7 @@ class MyVocabulary(tk.Frame):
 
         word_and_meaning = self.word_listbox.get(self.word_listbox.curselection()).split(">")
 
-        word_meaning_text = googletrans.LANGUAGES[self.translator.detect(word_and_meaning[0]).lang].capitalize() + ": " + word_and_meaning[0] + "\n\n" + googletrans.LANGUAGES[self.translator.detect(word_and_meaning[1]).lang].capitalize() + ": " + word_and_meaning[1]
+        word_meaning_text = googletrans.LANGUAGES[self.translator.detect(word_and_meaning[0]).lang].capitalize() + ": " + word_and_meaning[0].strip() + "\n\n" + googletrans.LANGUAGES[self.translator.detect(word_and_meaning[1]).lang].capitalize() + ": " + word_and_meaning[1].strip()
 
         word_meaning_label = ttk.Label(dbclick_window, text = word_meaning_text, wraplength = 350, justify = tk.CENTER)
         ok_button = ttk.Button(dbclick_window, text = "OK", command = lambda: [dbclick_window.destroy(), self.word_listbox.select_clear(0, "end")])
