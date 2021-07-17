@@ -53,6 +53,7 @@ class MyVocabulary(tk.Frame):
         self.src_lang_combobox.grid(row = 4, column = 0, padx = 10, pady = 10)
         self.src_lang_combobox.current(1)
         self.src_lang_combobox.bind("<<ComboboxSelected>>", lambda event: self.src_lang_code.set(self.langs[self.src_lang.get()]))
+        self.src_lang_combobox.bind("<<ComboboxSelected>>", self.src_language_checker)
         self.lang_swap_button.grid(row = 4, column = 1, padx = 10, pady = 10)
         self.dest_lang_combobox.grid(row = 4, column = 2, padx = 10, pady = 10)
         self.dest_lang_combobox.current(1)
@@ -101,8 +102,6 @@ class MyVocabulary(tk.Frame):
     
     def lang_swap(self):
 
-        if self.src_lang_combobox.current() == 0: self.src_lang_combobox.current(self.src_lang_combobox.current()+1)
-        
         temp_index = self.src_lang_combobox.current()
         temp_lang = self.src_lang.get()
 
@@ -226,7 +225,12 @@ class MyVocabulary(tk.Frame):
                 return True
             
         return False
-        
+    
+    def src_language_checker(self, event):
+
+        if self.src_lang_combobox.get() == "Auto": self.lang_swap_button.config(state = tk.DISABLED)
+        else: self.lang_swap_button.config(state = tk.NORMAL)
+
     def add_to_vocab(self, word, external = None):
 
         vocabulary = self.open_vocab("a", "vocabulary")
