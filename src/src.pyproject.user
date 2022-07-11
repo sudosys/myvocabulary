@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 7.0.2, 2022-07-11T18:19:40. -->
+<!-- Written by QtCreator 7.0.2, 2022-07-12T01:06:29. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -118,18 +118,37 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow.py</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow/mainwindow.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow/mainwindow.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow/mainwindow.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{648bc0b5-0765-40fe-b03a-9df0bc7e9391}</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\ahmed\OneDrive\Documents\GitHub\myvocabulary\src\mainwindow\mainwindow.py</value>
+    <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
+    <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseTerminal">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/mainwindow</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.1">
+    <value type="bool" key="Analyzer.Perf.Settings.UseGlobalSettings">true</value>
+    <value type="bool" key="Analyzer.QmlProfiler.Settings.UseGlobalSettings">true</value>
+    <value type="bool" key="Analyzer.Valgrind.Settings.UseGlobalSettings">true</value>
+    <valuelist type="QVariantList" key="CustomOutputParsers"/>
+    <value type="int" key="PE.EnvironmentAspect.Base">2</value>
+    <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/vocabulary.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/vocabulary.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src/vocabulary.py</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{cf05bf86-d73e-44d9-9a88-9e23ad6f12c3}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\ahmed\OneDrive\Documents\GitHub\myvocabulary\src\mainwindow.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\ahmed\OneDrive\Documents\GitHub\myvocabulary\src\vocabulary.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/ahmed/OneDrive/Documents/GitHub/myvocabulary/src</value>
    </valuemap>
-   <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
+   <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">2</value>
   </valuemap>
  </data>
  <data>
