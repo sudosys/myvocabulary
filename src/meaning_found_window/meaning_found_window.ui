@@ -49,7 +49,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>Meaning found! Would you like to add this word to your vocabulary?</string>
+    <string>Meaning found! Would you like to add this word to your vocabulary? Note: Meaning can be edited later in the table</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

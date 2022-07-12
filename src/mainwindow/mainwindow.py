@@ -3,7 +3,8 @@ import sys
 from pathlib import Path
 
 
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidget
+from PySide6 import QtCore
 from PySide6.QtCore import QFile
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtGui import QIcon, QPixmap
@@ -13,7 +14,7 @@ sys.path.append("../")
 from vocabulary import Vocabulary
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow, QTableWidget):
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -23,6 +24,7 @@ class MainWindow(QMainWindow):
         # GUI element bindings
         self.window.search_box.returnPressed.connect(self.window.search_button.click)
         self.window.search_button.clicked.connect(lambda: self.vocab.search_word(self.window.search_box.text()))
+        self.window.delete_button.clicked.connect(self.vocab.delete_selected_rows)
 
     def load_ui(self):
         loader = QUiLoader()

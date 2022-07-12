@@ -133,6 +133,19 @@
      </property>
     </column>
    </widget>
+   <widget class="QPushButton" name="delete_button">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>570</y>
+      <width>131</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete Selected Words</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
