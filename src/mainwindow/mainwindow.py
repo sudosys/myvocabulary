@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidget
-from PySide6 import QtCore
 from PySide6.QtCore import QFile
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtGui import QIcon, QPixmap
