@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets
 from googletrans import Translator
 
-from meaningFoundWindow.meaningFoundWindow import MeaningFoundWindow
+from meaningFoundWindow.MeaningFoundWindow import MeaningFoundWindow
 
 class Vocabulary:
 
@@ -88,7 +88,6 @@ class Vocabulary:
 
         self.dialogWindow.window.word_and_meaning.setText(word + " > " + translated)
 
-        self.dialogWindow.window.show()
         self.dialogWindow.window.exec()
 
     def addToWordTable(self, word, meaning):
