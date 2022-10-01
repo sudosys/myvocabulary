@@ -1,27 +1,28 @@
 from PySide6 import QtWidgets
 from googletrans import Translator
 
-from meaning_found_window.meaning_found_window import MeaningFoundWindow
+from meaningFoundWindow.meaningFoundWindow import MeaningFoundWindow
 
 class Vocabulary:
 
     def __init__(self, window):
+        
         self.window = window
-        self.number_of_words = 0
+        self.numberOfWords = 0
         self.words = []
         self.translator = Translator()
         
-        self.fill_word_table()
+        self.fillWordTable()
         
-        self.dialog_window = MeaningFoundWindow()
-        self.dialog_window.window.yes_button.clicked.connect(lambda: self.add_to_vocab(self.window.search_box.text(), self.translated))
-        self.dialog_window.window.no_button.clicked.connect(self.dialog_window.window.close)
+        self.dialogWindow = MeaningFoundWindow()
+        self.dialogWindow.window.yes_button.clicked.connect(lambda: self.addToVocab(self.window.search_box.text(), self.translated))
+        self.dialogWindow.window.no_button.clicked.connect(self.dialogWindow.window.close)
 
-    def fetch_vocab(self):
+    def fetchVocab(self):
 
         self.words = []
-        self.number_of_words = 0
-        self.window.word_table.setRowCount(self.number_of_words)
+        self.numberOfWords = 0
+        self.window.word_table.setRowCount(self.numberOfWords)
 
         try:
             file = open("../../vocabulary.txt", "r", encoding="utf-8")
@@ -33,34 +34,34 @@ class Vocabulary:
             word_pair[1] = word_pair[1].strip("\n")
 
             self.words.append(word_pair)
-            self.number_of_words += 1
+            self.numberOfWords += 1
 
         file.close()
 
-    def delete_selected_rows(self):
+    def deleteSelectedRows(self):
 
-        rows_to_delete = list(set([index.row() for index in self.window.word_table.selectedIndexes()]))
-        rows_to_delete.sort(reverse=True)
+        rowsToDelete = list(set([index.row() for index in self.window.word_table.selectedIndexes()]))
+        rowsToDelete.sort(reverse=True)
         
-        print(rows_to_delete)
+        print(rowsToDelete)
         
-        for row in rows_to_delete:
+        for row in rowsToDelete:
             self.window.word_table.removeRow(row)
             del self.words[row]
-            self.number_of_words -= 1
+            self.numberOfWords -= 1
 
-        self.update_vocab()
+        self.updateVocab()
 
-    def update_word_count_label(self):
-        self.window.word_count.setText(str(self.number_of_words) + " words in total")
+    def updateWordCountLabel(self):
+        self.window.word_count.setText(str(self.numberOfWords) + " words in total")
 
-    def fill_word_table(self):
+    def fillWordTable(self):
 
-        self.fetch_vocab()
+        self.fetchVocab()
 
-        self.window.word_table.setRowCount(self.number_of_words)
+        self.window.word_table.setRowCount(self.numberOfWords)
 
-        for row in range(self.number_of_words):
+        for row in range(self.numberOfWords):
 
             self.window.word_table.setItem(row, 0, QtWidgets.QTableWidgetItem(self.words[row][0]))
             self.window.word_table.setItem(row, 1, QtWidgets.QTableWidgetItem(self.words[row][1]))
@@ -68,9 +69,9 @@ class Vocabulary:
         self.window.word_table.resizeRowsToContents()
         self.window.word_table.scrollToBottom()
 
-        self.update_word_count_label()
+        self.updateWordCountLabel()
 
-    def update_vocab(self):
+    def updateVocab(self):
         
         file = open("../../vocabulary.txt", "w", encoding="utf-8")
 
@@ -79,28 +80,28 @@ class Vocabulary:
 
         file.close()
 
-        self.update_word_count_label()
+        self.updateWordCountLabel()
 
-    def search_word(self, word):
+    def searchWord(self, word):
 
         translated = self.translator.translate(word, src="en", dest="tr").text.lower()
 
-        self.dialog_window.window.word_and_meaning.setText(word + " > " + translated)
+        self.dialogWindow.window.word_and_meaning.setText(word + " > " + translated)
 
-        self.dialog_window.window.show()
-        self.dialog_window.window.exec()
+        self.dialogWindow.window.show()
+        self.dialogWindow.window.exec()
 
-    def add_to_word_table(self, word, meaning):
+    def addToWordTable(self, word, meaning):
 
         self.words.append([word, meaning])
-        self.number_of_words += 1
+        self.numberOfWords += 1
 
-        self.window.word_table.setRowCount(self.number_of_words)
+        self.window.word_table.setRowCount(self.numberOfWords)
 
-        self.window.word_table.setItem(self.number_of_words-1, 0, QtWidgets.QTableWidgetItem(self.words[self.number_of_words-1][0]))
-        self.window.word_table.setItem(self.number_of_words-1, 1, QtWidgets.QTableWidgetItem(self.words[self.number_of_words-1][1]))
+        self.window.word_table.setItem(self.numberOfWords-1, 0, QtWidgets.QTableWidgetItem(self.words[self.numberOfWords-1][0]))
+        self.window.word_table.setItem(self.numberOfWords-1, 1, QtWidgets.QTableWidgetItem(self.words[self.numberOfWords-1][1]))
     
-    def add_to_vocab(self, word_src, word_dest):
+    def addToVocab(self, word_src, word_dest):
 
         file = open("../../vocabulary.txt", "a", encoding="utf-8")
 
@@ -108,10 +109,10 @@ class Vocabulary:
 
         file.close()
 
-        self.dialog_window.window.close()
+        self.dialogWindow.window.close()
 
-        self.add_to_word_table(word_src, word_dest)
+        self.addToWordTable(word_src, word_dest)
 
         self.window.word_table.scrollToBottom()
 
-        self.update_word_count_label()
+        self.updateWordCountLabel()

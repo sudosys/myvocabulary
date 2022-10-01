@@ -15,29 +15,31 @@ from vocabulary import Vocabulary
 class MainWindow(QMainWindow, QTableWidget):
 
     def __init__(self):
+        
         super(MainWindow, self).__init__()
         self.window = None
-        self.load_ui()
+        self.loadUi()
         
         self.vocab = Vocabulary(self.window)
         
         # GUI element bindings
         self.window.search_box.returnPressed.connect(self.window.search_button.click)
-        self.window.search_button.clicked.connect(lambda: self.vocab.search_word(self.window.search_box.text()))
-        self.window.delete_button.clicked.connect(self.vocab.delete_selected_rows)
+        self.window.search_button.clicked.connect(lambda: self.vocab.searchWord(self.window.search_box.text()))
+        self.window.delete_button.clicked.connect(self.vocab.deleteSelectedRows)
 
-    def load_ui(self):
+    def loadUi(self):
+        
         loader = QUiLoader()
-        path = os.fspath(Path(__file__).resolve().parent / "mainwindow.ui")
+        path = os.fspath(Path(__file__).resolve().parent / "mainWindow.ui")
         
-        ui_file = QFile(path)
-        ui_file.open(QFile.ReadOnly)
-        self.window = loader.load(ui_file, self)
+        uiFile = QFile(path)
+        uiFile.open(QFile.ReadOnly)
+        self.window = loader.load(uiFile, self)
         
-        app_icon = QIcon(QPixmap("../../icons/myvocabulary_icon.png"))
-        self.window.setWindowIcon(app_icon)
+        appIcon = QIcon(QPixmap("../../icons/myvocabulary_icon.png"))
+        self.window.setWindowIcon(appIcon)
         self.window.show()
-        ui_file.close()
+        uiFile.close()
 
 if __name__ == "__main__":
 
