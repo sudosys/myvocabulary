@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets
 from googletrans import Translator
+import codecs
 
 from meaningFoundWindow.MeaningFoundWindow import MeaningFoundWindow
 
@@ -17,6 +18,7 @@ class Vocabulary:
         self.dialogWindow = MeaningFoundWindow()
         self.dialogWindow.window.yes_button.clicked.connect(lambda: self.addToVocab(self.window.search_box.text(), self.translated))
         self.dialogWindow.window.no_button.clicked.connect(self.dialogWindow.window.close)
+        self.window.word_table.itemChanged.connect(self.updateMeaning)
 
     def fetchVocab(self):
 
@@ -43,6 +45,8 @@ class Vocabulary:
         rowsToDelete = list(set([index.row() for index in self.window.word_table.selectedIndexes()]))
         rowsToDelete.sort(reverse=True)
         
+        print(self.window.word_table.item(1609,0).text())
+
         for row in rowsToDelete:
             self.window.word_table.removeRow(row)
             del self.words[row]
@@ -113,3 +117,14 @@ class Vocabulary:
         self.window.word_table.scrollToBottom()
 
         self.updateWordCountLabel()
+
+    def updateMeaning(self):
+        
+        currentCell = self.window.word_table.selectedItems()[0]
+
+        updatedMeaning = currentCell.text().encode("utf-8").decode("utf-8")
+
+        self.words[currentCell.row()][1] = updatedMeaning
+
+        self.updateVocab()
+        
