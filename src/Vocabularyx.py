@@ -1,6 +1,5 @@
 from PySide6 import QtWidgets
 from googletrans import Translator
-import codecs
 
 from meaningFoundWindow.MeaningFoundWindow import MeaningFoundWindow
 

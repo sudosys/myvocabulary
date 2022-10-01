@@ -9,7 +9,7 @@ from PySide6.QtGui import QIcon, QPixmap
 
 sys.path.append("../")
 
-from Vocabulary import Vocabulary
+from Vocabularyx import Vocabulary
 
 class MainWindow(QMainWindow, QTableWidget):
 
