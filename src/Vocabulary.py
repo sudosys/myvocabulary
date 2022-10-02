@@ -11,6 +11,8 @@ class Vocabulary:
         self.numberOfWords = 0
         self.words = []
         self.translator = Translator()
+        self.translated = ""
+        self.isNewWordAdded = False
         
         self.fillWordTable()
         
@@ -85,13 +87,15 @@ class Vocabulary:
 
     def searchWord(self, word):
 
-        translated = self.translator.translate(word, src="en", dest="tr").text.lower()
+        self.translated = self.translator.translate(word, src="en", dest="tr").text.lower()
 
-        self.dialogWindow.window.word_and_meaning.setText(word + " > " + translated)
+        self.dialogWindow.window.word_and_meaning.setText(word + " > " + self.translated)
 
         self.dialogWindow.window.exec()
 
     def addToWordTable(self, word, meaning):
+
+        self.isNewWordAdded = True
 
         self.words.append([word, meaning])
         self.numberOfWords += 1
@@ -118,7 +122,11 @@ class Vocabulary:
         self.updateWordCountLabel()
 
     def updateMeaning(self):
-        
+
+        if self.isNewWordAdded:
+            self.isNewWordAdded = False
+            return
+
         currentCell = self.window.word_table.selectedItems()[0]
 
         updatedMeaning = currentCell.text().encode("utf-8").decode("utf-8")
