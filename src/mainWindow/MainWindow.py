@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidget
-from PySide6.QtCore import QFile
+from PySide6.QtCore import QFile, Qt
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtGui import QIcon, QPixmap
 
@@ -18,7 +18,7 @@ class MainWindow(QMainWindow, QTableWidget):
         super(MainWindow, self).__init__()
         self.window = None
         self.loadUi()
-        
+        self.window.word_count.setAlignment(Qt.AlignCenter)
         self.vocab = Vocabulary(self.window)
 
         print(str(self.window.source_lang.currentText()), str(self.window.dest_lang.currentText()))
