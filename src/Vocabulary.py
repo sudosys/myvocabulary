@@ -46,7 +46,7 @@ class Vocabulary:
 
         file.close()
 
-    def deleteSelectedRows(self):
+    def deleteSelectedWords(self):
 
         rowsToDelete = list(set([index.row() for index in self.window.word_table.selectedIndexes()]))
         rowsToDelete.sort(reverse=True)
