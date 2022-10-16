@@ -45,8 +45,6 @@ class Vocabulary:
 
         rowsToDelete = list(set([index.row() for index in self.window.word_table.selectedIndexes()]))
         rowsToDelete.sort(reverse=True)
-        
-        print(self.window.word_table.item(1609,0).text())
 
         for row in rowsToDelete:
             self.window.word_table.removeRow(row)
