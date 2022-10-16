@@ -58,9 +58,9 @@
    <widget class="QLabel" name="word_count">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>160</x>
       <y>630</y>
-      <width>171</width>
+      <width>131</width>
       <height>20</height>
      </rect>
     </property>
@@ -124,12 +124,12 @@
     </attribute>
     <column>
      <property name="text">
-      <string>English</string>
+      <string>Source</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Turkish</string>
+      <string>Meaning</string>
      </property>
     </column>
    </widget>
@@ -156,7 +156,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QComboBox" name="target_lang">
+   <widget class="QComboBox" name="dest_lang">
     <property name="geometry">
      <rect>
       <x>240</x>

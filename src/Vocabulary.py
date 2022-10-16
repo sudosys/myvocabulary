@@ -13,6 +13,11 @@ class Vocabulary:
         self.translator = Translator()
         self.translated = ""
         self.isNewWordAdded = False
+
+        self.languageOptions = {
+        "Auto": "auto", "English": "en",
+        "French (Français)": "fr","German (Deutsch)": "de",
+        "Turkish (Türkçe)": "tr","Español (Spanish)": "es"}
         
         self.fillWordTable()
         
@@ -83,9 +88,12 @@ class Vocabulary:
 
         self.updateWordCountLabel()
 
-    def searchWord(self, word):
+    def searchWord(self, word, srcLangIndex, destLangIndex):
 
-        self.translated = self.translator.translate(word, src="en", dest="tr").text.lower()
+        srcLang = list(self.languageOptions.values())[srcLangIndex]
+        destLang = list(self.languageOptions.values())[destLangIndex]
+
+        self.translated = self.translator.translate(word, src=srcLang, dest=destLang).text.lower()
 
         self.dialogWindow.window.word_and_meaning.setText(word + " > " + self.translated)
 
